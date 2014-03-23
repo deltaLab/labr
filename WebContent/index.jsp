@@ -14,9 +14,6 @@
 <body>
 	9999
 	<%
-	out.write("<b>weorjtt</b><br>");
-	out.print(request.getServletContext().getContextPath() + "<br>");
-	out.print(request.getServletContext().getRealPath("/"));
 
 	String path = request.getServletContext().getRealPath("/");
 	Object rut = session.getAttribute("root");
@@ -42,7 +39,7 @@
 	bWriter.append("<div id='header'>");
 	bWriter.append("<div id='menu'>");
 	bWriter.append("<ul>");
-	bWriter.append("<li class='hmenu active' ><a node-request='Test'>主页</a></li>");
+	bWriter.append("<li class='hmenu active' ><a node-request='Test.svl'>主页</a></li>");
 	bWriter.append("<li class='hmenu'><a node-request=''>实验室概况</a></li>");
 	bWriter.append("<li class='hmenu'><a node-request=''>规章制度</a></li>");
 	bWriter.append("<li class='hmenu'><a node-request=''>学生风采</a></li>");
@@ -70,7 +67,7 @@
 	bWriter.append("<div class='entry'>");
 	bWriter.append("<p>");
 	bWriter.append("这个是 <strong>示例文字</strong>, 你可以加入任何东西，比如 <a");
-	bWriter.append("href='http://www.baidu.com' rel='nofollow'>百度的链接</a>,");
+	bWriter.append(" href='http://www.baidu.com' rel='nofollow'>百度的链接</a>,");
 	bWriter.append("如果你在新浪微博的关注人数超过了150个账号，那么请你现在刷新你的首页时间线，点击原创按钮筛选微博，你会发现一个事实，出现在你眼前的几乎只有媒体新闻账号、营销段子手和明星大V，你之前在微博上大部分好友都已经好久不见身影了，你也越来越不喜欢在微博上更新东西了。");
 	bWriter.append("");
 	bWriter.append("新浪微博在IPO文件中提到，“作为中国社会的微观形态，微博已吸引了多种用户，成为了一种文化现象。”而一直以来用户所能感受到的却是，新浪微博正加速远离普通用户的生活，又或者，她也从未真正走入普通用户的生活。微博完成了对用户社交网络（媒体）的启蒙，但却留不住他们。");

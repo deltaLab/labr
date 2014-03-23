@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 /**
  * 
  * @author lumence<br>
- *         ´¦Àíµ±Ç°sessionµÄÀà
+ *         session è¾…åŠ©ç±»
  */
 public class SessionUtil {
 

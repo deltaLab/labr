@@ -24,7 +24,7 @@
     </layout> 
 </appender>
 <appender name="addOne" class="org.apache.log4j.RollingFileAppender"> 
-    <param name="File" value="E:/log4j/gjs2sh/myLog4J-fist1.output.log" /> 
+    <param name="File" value="E:/log4j/labr/myLog4J-fist1.output.log" /> 
     <param name="Append" value="true" /> 
     <param name="MaxFileSize" value="10240" /> <!-- 设置文件大小 --> 
     <param name="MaxBackupIndex" value="10" /> 

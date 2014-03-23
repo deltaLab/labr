@@ -1,12 +1,13 @@
 package com.jxust.infolab.utils;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+
+import org.apache.log4j.Logger;
 
 public class EntityManagerHelper
 {
@@ -20,8 +21,7 @@ public class EntityManagerHelper
 		emf = Persistence.createEntityManagerFactory("blank");
 		
 		threadLocal = new ThreadLocal<EntityManager>();
-		logger = Logger.getLogger("blank");
-		logger.setLevel(Level.ALL);
+		logger = Logger.getLogger(EntityManagerHelper.class);
 	}
 
 	public static EntityManagerFactory getEntityManagerFactory()
@@ -70,7 +70,7 @@ public class EntityManagerHelper
 
 	public static void log(String info, Level level, Throwable ex)
 	{
-		logger.log(level, info, ex);
+		logger.info(ex);
 	}
 
 }

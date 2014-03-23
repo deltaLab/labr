@@ -10,6 +10,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
@@ -17,23 +18,23 @@ import com.jxust.infolab.utils.SessionUtil;
 
 /**
  * Servlet Filter implementation class FileRouter<br>
- * ·ÃÎÊÎÄ¼şÂ·ÓÉÀà,Ã¿Ò»´ÎÇëÇóÊ×ÏÈ±»Õâ¸öÀà²¶»ñµ½
+ * é¡¹ç›®åŸºç¡€è¿‡æ»¤å™¨
  */
-@WebFilter(description = "·ÃÎÊÂ·¾¶ÅĞ¶Ï", urlPatterns = { "/*" })
+@WebFilter(description = "è·¯å¾„è¿‡æ»¤å™¨", urlPatterns = { "*" })
 public class FileRouter implements Filter {
 	private static Logger log = Logger.getLogger(FileRouter.class);
 	/**
-	 * ä¯ÀÀÆ÷Ãû³Æ
+	 * æµè§ˆå™¨
 	 */
 	private final String BRS = "browser";
 	/**
-	 * ä¯ÀÀÆ÷°æ±¾
+	 * æµè§ˆå™¨ç‰ˆæœ¬
 	 */
 	private final String BRVS = "browserVersion";
 	/**
-	 * Ä³¸öä¯ÀÀÆ÷Ä³°æ±¾Ó¦¸Ã·ÃÎÊµÄÎ»ÖÃ
+	 * é¡¹ç›®æµè§ˆå™¨æ ¹è·¯å¾„
 	 */
-	private final String FAKE_ROOT="root";
+	private final String FAKE_ROOT = "root";
 
 	/**
 	 * Default constructor.
@@ -57,51 +58,63 @@ public class FileRouter implements Filter {
 		// TODO Auto-generated method stub
 		HttpServletRequest req = (HttpServletRequest) request;
 		String url = req.getServletPath();
-		String userAgent = req.getHeader("user-agent");//»ñÈ¡ä¯ÀÀÆ÷Ïà¹ØĞÅÏ¢
+		String userAgent = req.getHeader("user-agent");// è·å–æµè§ˆå™¨ä¿¡æ¯
 		log.info("url=" + url);
 		log.info("userAgent=" + userAgent);
-		// »ñÈ¡ä¯ÀÀÆ÷Ïà¹ØÄÚÈİ
-		if (SessionUtil.get(BRS) == null&&url.equals("/index.jsp")) {
-			SessionUtil.getSession(req);
-			userAgent = userAgent.toLowerCase();
-			if (userAgent.contains("chrome")) {//Chromeä¯ÀÀÆ÷
-				SessionUtil.set(BRS, "chorme");
-				SessionUtil.set(FAKE_ROOT, "chorme");
-			} else if (userAgent.contains("firefox")) {//FFä¯ÀÀÆ÷
-				SessionUtil.set(BRS, "firefox");
-				SessionUtil.set(FAKE_ROOT, "firefox");
-			} else if (userAgent.contains("msie")) {//IEä¯ÀÀÆ÷
-				SessionUtil.set(BRS, "ie");
-				String[] detailInfos = userAgent.split(";");
-				for(String detail:detailInfos){
-					if(detail.contains("msie")){//»ñÈ¡IE°æ±¾
-						String [] versions = detail.split(" ");
-						for(String v:versions){
-							if(v.matches("\\d{1,2}+(.[\\d]+){0,1}")){
-								float version = Float.parseFloat(v);
-								if(version<7){
-									SessionUtil.set(FAKE_ROOT, "ie6");									
-								}else if(version<9){
-									SessionUtil.set(FAKE_ROOT, "ie78");
-								}else{
-									SessionUtil.set(FAKE_ROOT, "ie9+");
-								}
-								SessionUtil.set(BRVS, version);
-								log.info("ie "+version);
-								break;
-							}
-						}
-						break;
-					}
-				}
-			}
-		}else{//Ã»ÓĞµÇÂ¼
-			//TODO µÚÒ»´Î½øÈë£¬µ«Ã»ÓĞ·ÃÎÊÊ×Ò³
+
+		// ç¬¬ä¸€æ¬¡è¿›å…¥
+		if (SessionUtil.get(BRS) == null) {
+			browserInit(req, userAgent);
+		}
+		if (url.endsWith(".svl")) {// è‹¥æ˜¯å‘ç”Ÿservletè¯·æ±‚
+			// è·å–servletè¯·æ±‚å
+			String servlet = url.substring(url.lastIndexOf('/'));
+			// æŠŠservletç§»åŠ¨åˆ°æ ¹ç›®å½•ä¸‹
+			req.getRequestDispatcher(servlet).forward(request, response);
+			// å¿…é¡»åŠ è¿”å›ï¼Œå¦åˆ™æŠ¥é”™
+			return;
 		}
 		// pass the request along the filter chain
 		chain.doFilter(request, response);
+
 	}
-	
+
+	private void browserInit(HttpServletRequest req, String userAgent) {
+		SessionUtil.getSession(req);
+		userAgent = userAgent.toLowerCase();
+		if (userAgent.contains("chrome")) {// Chromeæµè§ˆå™¨
+			SessionUtil.set(BRS, "chrome");
+			SessionUtil.set(FAKE_ROOT, "chrome");
+		} else if (userAgent.contains("firefox")) {// FFæµè§ˆå™¨
+			SessionUtil.set(BRS, "firefox");
+			SessionUtil.set(FAKE_ROOT, "firefox");
+		} else if (userAgent.contains("msie")) {// IEæµè§ˆå™¨
+			SessionUtil.set(BRS, "ie");
+			String[] detailInfos = userAgent.split(";");
+			for (String detail : detailInfos) {
+				if (detail.contains("msie")) {
+					String[] versions = detail.split(" ");
+					for (String v : versions) {
+						if (v.matches("\\d{1,2}+(.[\\d]+){0,1}")) {
+							float version = Float.parseFloat(v);
+							if (version < 7) {
+								SessionUtil.set(FAKE_ROOT, "ie6");
+							} else if (version < 9) {
+								SessionUtil.set(FAKE_ROOT, "ie78");
+							} else {
+								SessionUtil.set(FAKE_ROOT, "ie9+");
+							}
+							SessionUtil.set(BRVS, version);
+							log.info("ie " + version);
+							break;
+						}
+					}
+					break;
+				}
+			}
+		}
+	}
+
 	/**
 	 * @see Filter#init(FilterConfig)
 	 */

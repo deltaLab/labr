@@ -1,13 +1,14 @@
 $(".hmenu a").click(function() {
 	var href = $(this).attr("node-request");
 	$.ajax({
-		url:"·¢ËÍÇëÇóµÄµØÖ·£¬±ÈÈçÕâÀïÊÇ¡°Test¡±·¢ËÍÇëÇóµØÖ·ÊÇ¡°/Test¡±",
+		url:"çœŸæ­£çš„è¯·æ±‚åœ°å€ï¼Œå¦‚è¿™é‡Œhrefæ˜¯test.svl",
 		url : href,
-		dataType:"ÕâÀï×¢Ã÷·µ»ØÀàĞÍÊÇjson¸ñÊ½",
+		dataType:"è¿™é‡ŒæŒ‡å®šjsonç±»å‹æ•°æ®æ ¼å¼ï¼Œæ–¹ä¾¿ä»Šåå¤„ç†",
 		dataType:"json",
 	}).done(function(data) {
-		/*·µ»ØÊı¾İÊÇdata£¬ÉÏÃæ×¢Ã÷ÁË·µ»Øjson¸ñÊ½£¬ËùÒÔ×Ô¶¯´¦Àí³Éjson
-		 * µ±È»ÉÏÃæ·µ»ØÀàĞÍÒ²¿ÉÒÔ´«xml, json, script, htmlµÈÖµ*/
+		/*è¿”å›æ•°æ®æ˜¯dataæ ¼å¼æ˜¯jsonï¼Œé™¤äº†jsonå¤–
+		 * ä¸Šé¢dataTypeè¿˜å¯ä»¥ä¼ xml, json, script, htmlç­‰æ ¼å¼*/
+		$(this).parent().class("active");
 		alert(data);
 		alert(data.name);
 	});

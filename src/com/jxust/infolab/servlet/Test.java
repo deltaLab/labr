@@ -17,7 +17,7 @@ import com.jxust.infolab.beans.TestBean;
 /**
  * Servlet implementation class Test
  */
-@WebServlet("/Test")
+@WebServlet("/Test.svl")
 public class Test extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	Logger log = Logger.getLogger(getClass());

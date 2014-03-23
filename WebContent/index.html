@@ -10,16 +10,16 @@
 	<div id="header">
 		<div id="menu">
 			<ul>
-				<li class="hmenu active" ><a node-request="Test">主页</a></li>
-				<li class="hmenu"><a node-request="">实验室概况</a></li>
-				<li class="hmenu"><a node-request="">规章制度</a></li>
-				<li class="hmenu"><a node-request="">学生风采</a></li>
+				<li class="hmenu active" ><a node-request="Test.svl">主页</a></li>
+				<li class="hmenu"><a node-request="overView.svl">实验室概况</a></li>
+				<li class="hmenu"><a node-request="rules.svl">规章制度</a></li>
+				<li class="hmenu"><a node-request="students.svl">学生风采</a></li>
 			</ul>
 		</div>
 		<!-- end #menu -->
 		<div id="logo">
 			<h1>
-				<a href="#">Info Lab Logo </a>
+				<a href="index.html">Info Lab Logo </a>
 			</h1>
 		</div>
 	</div>
@@ -67,6 +67,11 @@
 								felis. Donec ut ante. In id eros.
 							</p>
 						</div>
+						<form action="upload.svl" method="post" enctype="multipart/form-data" >
+							<input type="file" name="123">
+							<input type="file" name="234">
+							<input type="submit">
+						</form>
 						<div>
 							<a href="#" class="links">查看详情</a>
 						</div>
