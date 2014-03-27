@@ -13,3 +13,4 @@ labr
 3.任何请求都会被FileRouter这个过滤器拦截到，FileRouter做的事是，把请求拦截到，把浏览器信息保存到session中，并且若是Servlet请求，需要重定向到项目根目录请求下。
 4.若是访问的是index.jsp则jsp负责在对应浏览器目录下生成index.html页面，并重定向到html页面。这样主要是解决不同浏览器的css问题，尤其是手机浏览器，部分手机浏览器对css走样严重，有新的需要单独处理的浏览器，需要在FileRouter类里面加入判断。同时每个浏览器目录下面js可能是一样也可能不一样。若需要差异化处理，这个可以根据session里面存放的浏览器信息进行，先判断后处理。
 5.利用jQuery使用Ajax的方式进行访问，若需要支持前进后退，需要在发送请求后，更改javascript的History对象里面的值。
+6.前台开发调试，可以访问根目录下的index.html。调试好css和js后，用buil.xml里面的ant脚本把相应的东西复制到各浏览器目录下，buil.xml没有复制index.html的任务，因为index是用利用index.jsp生成到各个目录下的，不是复制过去的。

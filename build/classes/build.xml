@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="Labr" default="all" basedir="E:\gitHub\labr">
+	<!-- chrome浏览器的根目录 -->
+	<property name="chrome-base" value="WebContent/chrome" />
+	<!-- firefox浏览器的根目录 -->
+	<property name="firefox-base" value="WebContent/firefox" />
+	<!-- ie6浏览器的根目录 -->
+	<property name="ie6-base" value="WebContent/ie6" />
+	<!-- ie78浏览器的根目录 -->
+	<property name="ie78-base" value="WebContent/ie78" />
+	<!-- ie9+浏览器的根目录 -->
+	<property name="ie9+-base" value="WebContent/ie9+" />
+	<target name="copy-js" description="复制js到各浏览器目录下">
+		<copy todir="${chrome-base}/script">
+			<fileset dir="WebContent/script">
+			</fileset>
+		</copy>
+		<copy todir="${firefox-base}/script">
+			<fileset dir="WebContent/script">
+			</fileset>
+		</copy>
+		<copy todir="${ie6-base}/script">
+			<fileset dir="WebContent/script">
+			</fileset>
+		</copy>
+		<copy todir="${ie78-base}/script">
+			<fileset dir="WebContent/script">
+			</fileset>
+		</copy>
+		<copy todir="${ie9+-base}/script">
+			<fileset dir="WebContent/script">
+			</fileset>
+		</copy>
+		<condition property="script-exist">
+			<and>
+				<available file="${chrome-base}/script" type="dir">
+				</available>
+				<available file="${firefox-base}/script" type="dir">
+				</available>
+				<available file="${ie6-base}/script" type="dir">
+				</available>
+				<available file="${ie78-base}/script" type="dir">
+				</available>
+				<available file="${ie9+-base}/script" type="dir">
+				</available>
+			</and>
+		</condition>
+	</target>
+	<target name="copy-css" description="复制css到各浏览器目录下">
+		<copy todir="${chrome-base}">
+			<fileset dir="WebContent/*.css">
+			</fileset>
+		</copy>
+		<copy todir="${firefox-base}">
+			<fileset dir="WebContent/*.css">
+			</fileset>
+		</copy>
+		<copy todir="${ie6-base}">
+			<fileset dir="WebContent/*.css">
+			</fileset>
+		</copy>
+		<copy todir="${ie78-base}">
+			<fileset dir="WebContent/*.css">
+			</fileset>
+		</copy>
+		<copy todir="${ie9+-base}">
+			<fileset dir="WebContent/*.css">
+			</fileset>
+		</copy>
+	</target>
+	<target name="copy-images" description="复制图片到各浏览器目录下">
+		<copy todir="${chrome-base}/images">
+			<fileset dir="WebContent/images">
+			</fileset>
+		</copy>
+		<copy todir="${firefox-base}/images">
+			<fileset dir="WebContent/images">
+			</fileset>
+		</copy>
+		<copy todir="${ie6-base}/images">
+			<fileset dir="WebContent/images">
+			</fileset>
+		</copy>
+		<copy todir="${ie78-base}/images">
+			<fileset dir="WebContent/images">
+			</fileset>
+		</copy>
+		<copy todir="${ie9+-base}/images">
+			<fileset dir="WebContent/images">
+			</fileset>
+		</copy>
+		<condition property="images-exist">
+			<and>
+				<available file="${chrome-base}/images" type="dir">
+				</available>
+				<available file="${firefox-base}/images" type="dir">
+				</available>
+				<available file="${ie6-base}/images" type="dir">
+				</available>
+				<available file="${ie78-base}/images" type="dir">
+				</available>
+				<available file="${ie9+-base}/images" type="dir">
+				</available>
+			</and>
+		</condition>
+	</target>
+
+	<target name="all" description="一键拷贝所有文件到对应目录下 " depends="copy-js,copy-css,copy-images" />
+</project>
