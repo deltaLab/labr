@@ -122,7 +122,7 @@ hr {
 	background: url(images/img05.jpg) no-repeat right top;
 }
 
-#menu a {
+#menu a,#menu font {
 	display: block;
 	float: left;
 	height: 34px;
@@ -138,10 +138,13 @@ hr {
 	color: #FFFFFF;
 	cursor: pointer;
 }
+#menu font{
+	padding: 30px 5px 0px 0px;
+}
 
-#menu a:hover {
+#menu li:hover {
 	font-weight: bold;
-	background-color: #101010;
+	background:url(images/img07.png) left bottom;
 }
 
 #menu .current_page_item a {
@@ -151,7 +154,7 @@ hr {
 	background: none;
 }
 #menu li.active{
-	background-color:#101010;
+	background:url(images/img07.png) left bottom;
 }
 
 /* Search */
@@ -495,4 +498,11 @@ li.active{
 	margin-bottom: 10px;
 	padding: 10px 0px 10px 0px;
 	background: url(images/img04.jpg) no-repeat left bottom;
+}
+
+#logio{
+	font-size: 14px;
+	font-family:Î¢ÈíÑÅºÚ;
+	float:right;
+	cursor: pointer;
 }

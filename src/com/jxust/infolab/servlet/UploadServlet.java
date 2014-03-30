@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import net.coobird.thumbnailator.Thumbnails;
+
 import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
@@ -36,12 +38,12 @@ import com.jxust.infolab.utils.Constants;
 /* 这个是配置这个servlet用于处理二进制数据，与前台的 enctype="multipart/form-data" 对应 */
 /* 单个文件最大10M，总文件大小最大300M */
 @MultipartConfig(maxFileSize = 1024 * 1024 * 10, maxRequestSize = 1024 * 1024 * 300)
-@WebServlet("/upload.svl")
+@WebServlet("/Upload.svl")
 public class UploadServlet extends HttpServlet {
 	private static final long serialVersionUID = 2304820820384L;
 	private final Logger log = Logger.getLogger(getClass());
 	private final String picType = "BMP,DXF,EMF,EPS,FLI,FLC,GIF,JPEG,JPG,LIC,PCX,PNG,PSD,SWF,SVG,TGA,TIFF,WMF";
-	private String[] picTypes=null;
+	private String[] picTypes = null;
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -53,17 +55,24 @@ public class UploadServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=UTF-8");
 		Collection<Part> parts = null;
+		StringBuffer sbf = new StringBuffer("{");
 		try {
 			parts = request.getParts();
 		} catch (IllegalStateException ise) {
 			// 可能某个文件大于指定文件容量maxFileSize，或者提交数据大于maxRequestSize
-			log.info("maybe the request body is larger than maxRequestSize, or any Part in the request is larger than maxFileSize");
+			sbf.append("'status':'false',");
+			sbf.append("'message':'可能某个文件大于指定文件容量maxFileSize，或者提交数据大于maxRequestSize'");
+			log.info("可能某个文件大于指定文件容量maxFileSize，或者提交数据大于maxRequestSize");
 		} catch (IOException ioe) {
 			// 在获取某个文件时遇到拉IO异常错误
-			log.error("an I/O error occurred during the retrieval of the Part components of this request");
-		} catch (Exception e) {
-			log.error("the request body is larger than maxRequestSize, or any Part in the request is larger than maxFileSize");
-			e.printStackTrace();
+			log.error("在获取某个文件时遇到了IO异常错误");
+			sbf.append("'status':'false',");
+			sbf.append("'message':'在获取某个文件时遇到了IO异常错误'");
+		}finally{
+			if(sbf.length()>1){
+				sbf.append("}");
+			}
+			writeOut(sbf.toString(), response);
 		}
 
 		if (isEmpty(parts, response)) {
@@ -80,7 +89,7 @@ public class UploadServlet extends HttpServlet {
 		InputStream filecontent = null;
 		// 前端具有几个file组件，这里会对应几个Part对象
 		for (Part part : parts) {
-			if (part == null) {
+			if (part == null||part.getSize()==0) {
 				continue;
 			}
 			// 这里提取源文件名
@@ -124,10 +133,7 @@ public class UploadServlet extends HttpServlet {
 
 		Gson gson = new Gson();
 		String files = gson.toJson(fileNames, fileNames.getClass());
-		PrintWriter writer = response.getWriter();
-		writer.print("{'status':'succes',files':'" + files + "}");
-		writer.flush();
-		writer.close();
+		writeOut("{'status':'succes',files':'" + files + "}",response);
 	}
 
 	/**
@@ -138,13 +144,13 @@ public class UploadServlet extends HttpServlet {
 	 */
 	private boolean isPicture(String fileType) {
 		boolean isPic = false;
-		if(fileType!=null){
+		if (fileType != null) {
 			fileType = fileType.toUpperCase();
-			if(picTypes==null){
+			if (picTypes == null) {
 				picTypes = picType.split(",");
 			}
-			for(String type:picTypes){
-				if(type.equals(fileType)){
+			for (String type : picTypes) {
+				if (type.equals(fileType)) {
 					isPic = true;
 					break;
 				}
@@ -159,9 +165,16 @@ public class UploadServlet extends HttpServlet {
 	 * @param filePaths
 	 */
 	private void resizePicture(List<String> filePaths) {
-		// TODO Auto-generated method stub
 		for (String path : filePaths) {
-
+			try {
+				for(Integer[] size:Constants.pictureSizes){
+					Thumbnails.of(path).size(size[0], size[1])
+							.toFile(path + "_"+size[0]+"x"+size[1]+".jpg");
+				}
+			} catch (IOException e) {
+				log.error(e.getMessage(), e);
+			}
+			log.info("图片缩放"+path);
 		}
 	}
 
@@ -173,19 +186,10 @@ public class UploadServlet extends HttpServlet {
 	 * @return
 	 */
 	private boolean isEmpty(Collection<Part> parts, HttpServletResponse response) {
-		boolean empty = true;
+		boolean empty = false;
 		if (parts == null || parts.isEmpty()) {
 			log.error("上传文件为空");
-			PrintWriter out;
-			try {
-				out = response.getWriter();
-				out.print("{'status':'failure','files':'0'}");
-				out.flush();
-				out.close();
-				empty = false;
-			} catch (IOException e) {
-				log.error(e.getMessage());
-			}
+			writeOut("{'status':'failure','message':'上传文件为空'}",response);
 		}
 		return empty;
 	}
@@ -218,5 +222,17 @@ public class UploadServlet extends HttpServlet {
 			fileType = "." + fileType;
 		}
 		return t + "" + (int) (Math.random() * 900) + fileType;
+	}
+	
+	private void writeOut(String message, HttpServletResponse response){
+		PrintWriter out;
+		try {
+			out = response.getWriter();
+			out.print(message);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			log.error(e.getMessage());
+		}
 	}
 }

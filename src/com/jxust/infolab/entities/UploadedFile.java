@@ -15,10 +15,26 @@ import javax.persistence.TemporalType;
 @Table(name = "uploaded_file")
 public class UploadedFile {
 	private int id;
+	/**
+	 * 学生名字
+	 */
 	private String userName;
+	/**
+	 * 文件名称
+	 */
 	private String fileName;
+	/**
+	 * 保存的名字
+	 */
 	private String saveName;
+	/**
+	 * 文件类型，后缀
+	 */
 	private String fileType;
+	/**
+	 * 文件用途
+	 */
+	private String useType;
 	private Date createTime;
 	private Date modefyTime;
 	private Date delTime;
@@ -68,7 +84,14 @@ public class UploadedFile {
 	public void setFileType(String fileType) {
 		this.fileType = fileType;
 	}
+	@Column(name = "use_type")
+	public String getUseType() {
+		return useType;
+	}
 
+	public void setUseType(String useType) {
+		this.useType = useType;
+	}
 	@Column(name = "is_valid")
 	public boolean isValid() {
 		return isValid;
