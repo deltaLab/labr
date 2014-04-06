@@ -49,7 +49,7 @@ public class OverView extends HttpServlet {
 		testBean.setName("tome");
 		Gson gson = new Gson();
 		String result = gson.toJson(testBean);
-		out.write(result);
+		out.write("{}");
 		out.close();
 		log.info("end");
 	}

@@ -55,7 +55,8 @@ public class FileRouter implements Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-		// TODO Auto-generated method stub
+
+		response.setCharacterEncoding("utf-8");
 		HttpServletRequest req = (HttpServletRequest) request;
 		String url = req.getServletPath();
 		String userAgent = req.getHeader("user-agent");// 获取浏览器信息
@@ -63,7 +64,7 @@ public class FileRouter implements Filter {
 		log.info("userAgent=" + userAgent);
 
 		// 第一次进入
-		if (SessionUtil.get(BRS) == null) {
+		if (SessionUtil.get(BRS,req) == null) {
 			browserInit(req, userAgent);
 		}
 		if (url.endsWith(".svl")) {// 若是发生servlet请求
@@ -83,13 +84,13 @@ public class FileRouter implements Filter {
 		SessionUtil.getSession(req);
 		userAgent = userAgent.toLowerCase();
 		if (userAgent.contains("chrome")) {// Chrome浏览器
-			SessionUtil.set(BRS, "chrome");
-			SessionUtil.set(FAKE_ROOT, "chrome");
+			SessionUtil.set(BRS, "chrome",req);
+			SessionUtil.set(FAKE_ROOT, "chrome",req);
 		} else if (userAgent.contains("firefox")) {// FF浏览器
-			SessionUtil.set(BRS, "firefox");
-			SessionUtil.set(FAKE_ROOT, "firefox");
+			SessionUtil.set(BRS, "firefox",req);
+			SessionUtil.set(FAKE_ROOT, "firefox",req);
 		} else if (userAgent.contains("msie")) {// IE浏览器
-			SessionUtil.set(BRS, "ie");
+			SessionUtil.set(BRS, "ie",req);
 			String[] detailInfos = userAgent.split(";");
 			for (String detail : detailInfos) {
 				if (detail.contains("msie")) {
@@ -98,13 +99,13 @@ public class FileRouter implements Filter {
 						if (v.matches("\\d{1,2}+(.[\\d]+){0,1}")) {
 							float version = Float.parseFloat(v);
 							if (version < 7) {
-								SessionUtil.set(FAKE_ROOT, "ie6");
+								SessionUtil.set(FAKE_ROOT, "ie6",req);
 							} else if (version < 9) {
-								SessionUtil.set(FAKE_ROOT, "ie78");
+								SessionUtil.set(FAKE_ROOT, "ie78",req);
 							} else {
-								SessionUtil.set(FAKE_ROOT, "ie9+");
+								SessionUtil.set(FAKE_ROOT, "ie9+",req);
 							}
-							SessionUtil.set(BRVS, version);
+							SessionUtil.set(BRVS, version,req);
 							log.info("ie " + version);
 							break;
 						}

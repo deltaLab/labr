@@ -9,7 +9,6 @@ import javax.persistence.Query;
 import org.apache.log4j.Logger;
 
 import com.jxust.infolab.beans.StudentShowBean;
-import com.jxust.infolab.entities.UserInfo;
 import com.jxust.infolab.utils.EntityManagerHelper;
 
 public class StudentsShowDao {
@@ -23,7 +22,7 @@ public class StudentsShowDao {
 		List<StudentShowBean> studentShowList = new ArrayList<StudentShowBean>();
 		EntityManager em = EntityManagerHelper.getEntityManager();
 		em.clear();
-		String jpql = "select uf.id,uf.saveName,uf.userName ，ss.year,ss.gender,ss.subject, ss.classNo from UploadedFile uf ,StudentShow ss where uf.userName=ss.name";
+		String jpql = "select uf.id,uf.saveName,uf.userName ,ss.year,ss.gender,ss.subject, ss.classNo from UploadedFile uf ,StudentShow ss where uf.userName=ss.name";
 		try {
 			Query query = getEntityManager().createQuery(jpql);
 			query.setFirstResult(offset);
@@ -36,34 +35,40 @@ public class StudentsShowDao {
 					StudentShowBean ssBean = new StudentShowBean();
 					bean: for (int i = 0; i < cols.length; i++) {
 						switch (i) {
-						case 1:
+						case 0:
 							if (cols[i] != null) {
 								ssBean.setPicId((Integer) cols[i]);
 							} else {
 								break bean;
 							}
-						case 2:
+							break;
+						case 1:
 							if (cols[i] != null) {
 								ssBean.setPicPath((String) cols[i]);
 							} else {
 								break bean;
 							}
-						case 3:
+							break;
+						case 2:
 							if (cols[i] != null) {
 								ssBean.setName((String) cols[i]);
 							}
-						case 4:
+							break;
+						case 3:
 							if (cols[i] != null) {
 								ssBean.setYear((Integer) cols[i]);
 							}
-						case 5:
+							break;
+						case 4:
 							if (cols[i] != null) {
 								ssBean.setGender((String) cols[i]);
 							}
-						case 6:
+							break;
+						case 5:
 							if (cols[i] != null) {
 								ssBean.setSubject((String) cols[i]);
 							}
+							break;
 						default:
 							if (cols[i] != null) {
 								ssBean.setClassNo((String) cols[i]);
@@ -80,7 +85,7 @@ public class StudentsShowDao {
 		} finally {
 			em.close();
 		}
-		log.info("查询图片成功");
+		log.info("查询图片成功,共"+studentShowList.size()+"个对象");
 		return studentShowList;
 	}
 }

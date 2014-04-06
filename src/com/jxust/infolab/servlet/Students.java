@@ -45,6 +45,8 @@ public class Students extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String sOffset = request.getParameter("offset");
 		String sPageSize = request.getParameter("pageSize");
+		String subpath = request.getParameter("subpath");
+		System.out.println(subpath);
 		int offset = 0;
 		int pageSize =10;
 		if(sOffset!=null&&sOffset.matches("\\d+")){

@@ -28,7 +28,8 @@ public class SessionUtil {
 		session.invalidate();
 	}
 
-	public static void set(String attr, Object value) {
+	public static void set(String attr, Object value,HttpServletRequest req) {
+		session = req.getSession();
 		if (session != null) {
 			session.setAttribute(attr, value);
 		} else {
@@ -36,8 +37,9 @@ public class SessionUtil {
 		}
 	}
 
-	public static Object get(String attr) {
+	public static Object get(String attr,HttpServletRequest req) {
 		Object value = null;
+		session = req.getSession();
 		if (session != null) {
 			try {
 				value = session.getAttribute(attr);

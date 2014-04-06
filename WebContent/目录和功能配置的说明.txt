@@ -1,0 +1,67 @@
+一、如何配置目录
+目录是配置的，配置方式是，在main.js文件里面，找到如：
+var menuTree = {
+	"Home.svl" : {
+		"value" : "首页",
+		"default" : "fileUpload",
+		"fileUpload" : "文件上传",
+		"uploadedFils" : "查看上传文件列表"
+	},
+	"OverView.svl" : {
+		"value" : "实验室概况",
+		"default" : "introduce",
+		"introduce" : "介绍"
+	},
+};
+的这么一个javascript对象。这个对象保含了整个目录
+例如上面有这么一段：
+"Home.svl" : {
+	"value" : "首页",
+	"default" : "fileUpload",
+	"fileUpload" : "文件上传",
+	"uploadedFils" : "查看上传文件列表"
+}
+其中Home.svl是首页的链接是主目录点击后会生成Home.svl这里的hash。例如我们的地址是http://localhost:8080/labr/index.html。
+那么点击首页后会产生http://localhost:8080/labr/index.html#Home.svl这样的地址【Home.svl】就是对应的Servlet的URL地址。
+【"value" : "首页"】意思是：的对Home.svl显示【首页】二字。
+【"default" : "fileUpload"】意思是：默认触发【fileUpload】链接。
+【"fileUpload" : "文件上传"】意思是：点击【文件上传】子目录时，会触发【fileUpload】的链接。例如刚才点击首页时，
+产生的链接是http://localhost:8080/labr/index.html#Home.svl。这个时候点击【文件上传】，
+则产生链接是http://localhost:8080/labr/index.html#Home.svl&fileUpload。这里【Home.svl】是Servlet地址【fileUpload】会当作【subpath】参数传递给Servlet。
+Servlet需要根据不同的subpath参数返回不同的结果。
+
+二、如何处理返回的数据。
+返回结果的需要处理，也就是需要写一个处理结果数据的方法,例如：
+function rules(data, subpath) {
+	alert("提示",data);
+}
+怎么把上面这个方法与返回结果联系起来？这里采用的仍然是配置。还是在main.js中
+有这么一个javascript对象
+var callSwitcher = {
+	"Students.svl" : student,
+	"OverView.svl" : overView,
+	"Home.svl" : home,
+	"Rules.svl" : rules
+};
+其中【"Students.svl" : student】意思是说【Students.svl】对应Servlet返回的结果，交由student方法处理。
+
+三、前进后退时怎么实现的，如何避免重复提交数据。
+若需要前进后退，那么浏览器地址栏的地址必须改变，所以，我们的记录参数就是hash【即url中"#"号后面部分】，在main.js代码中，有这么一段：
+$(window).hashchange(function() {
+	attach();
+});
+就是说，当地址栏hash变化时，调用attach方法。attach管理这所以初始化方法。这样就实现了前进后退。
+因为attach在触发的一些方法中调用了方法menuRequest(href, deal, request, dtType)。此方法中有这样一段代码给url赋值了：
+if (ignor[href]) {
+	location.hash = href + "&" + request.subpath;
+}
+
+避免重复提交数据就不能把提交数据的地址记录到url中去。也就是不能产生hash变化。
+那么怎么避免呢。
+1.这种方式，是配置忽略的url
+例如有地址为【Upload.svl】的Servlet，负责上传文件。那么我们就配置到下面这个对象里面。
+var ignor = {
+	"Logout.svl" : "true",
+	"Upload.svl" : "true"
+};
+2.这种方式是不调用menuRequest方法，如main.js中的listenUpload方法

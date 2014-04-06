@@ -37,7 +37,7 @@ public class Logout extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		log.info(SessionUtil.get("userName")+":log out");
+		log.info(SessionUtil.get("userName",request)+":log out");
 		SessionUtil.invalid();
 	}
 

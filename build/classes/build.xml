@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<project name="Labr" default="all" basedir="E:\gitHub\labr">
+<project name="Labr" default="all" basedir="../">
 	<!-- chrome浏览器的根目录 -->
 	<property name="chrome-base" value="WebContent/chrome" />
 	<!-- firefox浏览器的根目录 -->
@@ -48,45 +48,55 @@
 	</target>
 	<target name="copy-css" description="复制css到各浏览器目录下">
 		<copy todir="${chrome-base}">
-			<fileset dir="WebContent/*.css">
+			<fileset dir="WebContent/">
+			    <include name="*.css"></include>
 			</fileset>
 		</copy>
 		<copy todir="${firefox-base}">
-			<fileset dir="WebContent/*.css">
+			<fileset dir="WebContent/">
+			    <include name="*.css"></include>
 			</fileset>
 		</copy>
 		<copy todir="${ie6-base}">
-			<fileset dir="WebContent/*.css">
+			<fileset dir="WebContent/">
+			    <include name="*.css"></include>
 			</fileset>
 		</copy>
 		<copy todir="${ie78-base}">
-			<fileset dir="WebContent/*.css">
+			<fileset dir="WebContent/">
+			    <include name="*.css"></include>
 			</fileset>
 		</copy>
 		<copy todir="${ie9+-base}">
-			<fileset dir="WebContent/*.css">
+			<fileset dir="WebContent/">
+			    <include name="*.css"></include>
 			</fileset>
 		</copy>
 	</target>
 	<target name="copy-images" description="复制图片到各浏览器目录下">
 		<copy todir="${chrome-base}/images">
 			<fileset dir="WebContent/images">
+			    <include name="*"></include>
 			</fileset>
 		</copy>
 		<copy todir="${firefox-base}/images">
 			<fileset dir="WebContent/images">
+			    <include name="*"></include>
 			</fileset>
 		</copy>
 		<copy todir="${ie6-base}/images">
 			<fileset dir="WebContent/images">
+			    <include name="*"></include>
 			</fileset>
 		</copy>
 		<copy todir="${ie78-base}/images">
 			<fileset dir="WebContent/images">
+			    <include name="*"></include>
 			</fileset>
 		</copy>
 		<copy todir="${ie9+-base}/images">
 			<fileset dir="WebContent/images">
+			    <include name="*"></include>
 			</fileset>
 		</copy>
 		<condition property="images-exist">

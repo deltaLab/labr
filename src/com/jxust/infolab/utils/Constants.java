@@ -19,7 +19,7 @@ public class Constants {
 	/**
 	 * 文件上传存放目录
 	 */
-	public static String uploadPath = "E:/labr/upload";
+	public static String uploadPath = "/files/upload";
 	/**
 	 * 图片缩放尺寸
 	 */
